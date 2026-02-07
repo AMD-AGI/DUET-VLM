@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/AMD-AGI/DUET-VLM"><img src="https://img.shields.io/badge/GitHub-DUET--VLM-blue?logo=github" alt="GitHub"></a>
-  <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-green.svg" alt="License"></a>
+  <!-- <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-green.svg" alt="License"></a> -->
 </p>
 
 ---
@@ -77,7 +77,7 @@ tokenizer, model, image_processor, context_len = load_pretrained_model(
 )
 
 # Apply VisionZip (Stage 1: patches CLIP encoder)
-model = visionzip(model, dominant=191, contextual=30, cluster_width=4)
+model = visionzip(model, dominant=170, contextual=35, cluster_width=4)
 
 # PyramidDrop (Stage 2) is integrated in the model forward pass
 ```
@@ -95,7 +95,7 @@ tokenizer, model, processor, context_len = load_pretrained_model(
 )
 
 # Apply VisionZip for Video-LLaVA (patches LanguageBind towers)
-model = visionzip_video(model, dominant=191, contextual=30, cluster_width=4)
+model = visionzip_video(model, dominant=170, contextual=35, cluster_width=4)
 ```
 
 ### Qwen2.5-VL with DUET-VLM
@@ -118,8 +118,8 @@ model.configure_duet(
     dominant_tokens=170,
     contextual_tokens=35,
     pdrop_enabled=True,
-    layer_list=[7, 14, 21],
-    ratio_list=[1.0, 0.75, 0.5, 0.25]
+    layer_list=[14, 21],
+    ratio_list=[0.5, 0.25]
 )
 ```
 
@@ -191,22 +191,6 @@ bash scripts/llava/v1_5/pdrop_train/finetune.sh
 # Video-LLaVA fine-tuning
 bash scripts/videollava/v1_5/finetune.sh
 ```
-
-## License
-
-Copyright (c) 2024-2025 Advanced Micro Devices, Inc. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
 
 ## Acknowledgement
 
