@@ -1,0 +1,63 @@
+# Build artifacts
+.eggs/
+.mypy_cache
+*.egg-info/
+build/
+dist/
+pip-wheel-metadata/
+
+# Dev tools
+.envrc
+.python-version
+.idea
+.venv/
+.vscode/
+.cursor/
+/*.iml
+pyrightconfig.json
+.ruff.toml
+
+# Jupyter notebooks
+.ipynb_checkpoints
+
+# Miscellaneous
+.cache/
+*.swp
+.DS_Store
+
+# Python
+*.pyc
+*.pyo
+__pycache__/
+
+# Testing and CI
+.coverage
+.pytest_cache/
+.benchmarks
+
+# Runs and logging
+/runs/
+/wandb/
+/scratch/
+core
+logs/
+*.out
+
+# Model checkpoints and weights
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+
+# Answers and results (generated at eval time)
+/answers/
+
+# GPU core dumps
+gpucore.*
+
+# Large data files
+datasets/
+output/
+downloads/
+wandb_api
