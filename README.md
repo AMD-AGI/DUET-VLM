@@ -1,5 +1,3 @@
-# DUET-VLM
-
 <p align="center">
   <b>DUET-VLM: Dual-Stage Efficient Token Reduction for Vision-Language Models</b>
 </p>
