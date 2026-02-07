@@ -1,11 +1,9 @@
-<p align="center">
+<div align="center">
+  <br>
+  <br>
   <h1>DUET-VLM: Dual-Stage Efficient Token Reduction for Vision-Language Models</h1>
-</p>
-
-<p align="center">
-  <a href="https://github.com/AMD-AGI/DUET-VLM"><img src="https://img.shields.io/badge/GitHub-DUET--VLM-blue?logo=github" alt="GitHub"></a>
-  <!-- <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-green.svg" alt="License"></a> -->
-</p>
+<a href="https://github.com/AMD-AGI/DUET-VLM"><img src="https://img.shields.io/badge/GitHub-DUET--VLM-blue?logo=github" alt="GitHub"></a>
+</div>
 
 ---
 
