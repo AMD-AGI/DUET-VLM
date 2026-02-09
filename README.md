@@ -3,6 +3,7 @@
   <br>
   <h1>DUET-VLM: Dual-Stage Efficient Token Reduction for Vision-Language Models</h1>
 <a href="https://github.com/AMD-AGI/DUET-VLM"><img src="https://img.shields.io/badge/GitHub-DUET--VLM-blue?logo=github" alt="GitHub"></a>
+<a href="https://github.com/AMD-AGI/DUET-VLM/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0"></a>
 </div>
 
 ---
@@ -191,3 +192,7 @@ bash scripts/videollava/v1_5/finetune.sh
 ## Acknowledgement
 
 This codebase builds on [LLaVA](https://github.com/haotian-liu/LLaVA), [Video-LLaVA](https://github.com/PKU-YuanGroup/Video-LLaVA), [VisionZip](https://github.com/dvlab-research/VisionZip), [PyramidDrop](https://github.com/Cooperx521/PyramidDrop), and [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL).
+
+## License
+
+DUET-VLM is released under the [Apache License 2.0](LICENSE).
