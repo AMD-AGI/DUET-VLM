@@ -7,6 +7,7 @@ dist/
 pip-wheel-metadata/
 
 # Dev tools
+.env
 .envrc
 .python-version
 .idea
