@@ -101,9 +101,17 @@ def load_and_transform_video(
         frame_id_list = np.linspace(0, duration-1, num_frames, dtype=int)
 
         video_data = []
+        last_valid_frame = None
         for frame_idx in frame_id_list:
             cv2_vr.set(1, frame_idx)
-            _, frame = cv2_vr.read()
+            ret, frame = cv2_vr.read()
+            if not ret or frame is None:
+                if last_valid_frame is not None:
+                    frame = last_valid_frame.copy()
+                else:
+                    frame = np.zeros((224, 224, 3), dtype=np.uint8)
+            else:
+                last_valid_frame = frame
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             video_data.append(torch.from_numpy(frame).permute(2, 0, 1))
         cv2_vr.release()
