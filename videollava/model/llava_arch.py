@@ -448,14 +448,24 @@ class LlavaMetaForCausalLM(ABC):
 
         new_input_embeds = []
         new_labels = []
-        cur_image_idx = 0
         image_token_posi = []
-        prompt_len = [] if not self.training else None
-        image_tokens = []
-        # print(f">>> image_features = {image_features}")
-        # print(f">>> image_features.isnan() = {image_features.isnan().any()}")
-
+        prompt_len = []
+        cur_image_idx = 0
         for batch_idx, cur_input_ids in enumerate(input_ids):
+            image_index = torch.where(cur_input_ids == IMAGE_TOKEN_INDEX)[0].tolist()
+            if image_index == []:
+                image_token_posi.append(-1)
+            elif len(image_index) == 1:
+                image_token_posi.append(image_index[0])
+            else:
+                image_token_posi.append(image_index)
+            
+            if not self.training:
+                if image_index == []:
+                    prompt_len.append(cur_input_ids.shape[0])
+                else:
+                    prompt_len.append(cur_input_ids.shape[0] - len(image_index))
+            
             num_images = (cur_input_ids == IMAGE_TOKEN_INDEX).sum()
             if num_images == 0:
                 # No vision tokens
@@ -464,22 +474,10 @@ class LlavaMetaForCausalLM(ABC):
                 cur_input_embeds = torch.cat([cur_input_embeds_1, cur_image_features[0:0]], dim=0)
                 new_input_embeds.append(cur_input_embeds)
                 new_labels.append(labels[batch_idx])
-                image_token_posi.append(-1)
-                image_tokens.append(0)
-                if not self.training:
-                    prompt_len.append(cur_input_ids.shape[0])
                 cur_image_idx += 1
                 continue
 
-            # Record first image token position for pdrop and prompt length for inference
-            img_positions = torch.where(cur_input_ids == IMAGE_TOKEN_INDEX)[0]
-            first_img_pos = int(img_positions[0].item()) if img_positions.numel() > 0 else -1
-            image_token_posi.append(first_img_pos)
-            if not self.training:
-                # FIX: Use first_img_pos instead of total-1 to correctly handle videos with multiple consecutive image tokens
-                prompt_len.append(first_img_pos)
-
-            image_token_indices = [-1] + img_positions.tolist() + [cur_input_ids.shape[0]]
+            image_token_indices = [-1] + torch.where(cur_input_ids == IMAGE_TOKEN_INDEX)[0].tolist() + [cur_input_ids.shape[0]]
             cur_input_ids_noim = []
             cur_labels = labels[batch_idx]
             cur_labels_noim = []
@@ -523,10 +521,10 @@ class LlavaMetaForCausalLM(ABC):
 
         self.model.image_token_posi = image_token_posi
         self.model.prompt_len = prompt_len
-        self.model.image_tokens = [image_feature.shape[0] for image_feature in image_features ]
+        self.model.image_tokens = [[img_f.shape[0] for img_f in image_feature] if isinstance(image_feature, list) else image_feature.shape[0] for image_feature in tmp_image_features]
 
         # Truncate sequences to max tokenizer length
-        tokenizer_model_max_length = getattr(self.config, 'tokenizer_model_max_length', None)
+        tokenizer_model_max_length = getattr(self.config, 'tokenizer_model_max_length', 2048 * 8)
         if tokenizer_model_max_length is not None:
             new_input_embeds = [x[:tokenizer_model_max_length] for x in new_input_embeds]
             new_labels = [x[:tokenizer_model_max_length] for x in new_labels]
