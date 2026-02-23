@@ -33,6 +33,9 @@ setup(
         "sentencepiece",
         "tiktoken",
         "spacy",
+        "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/"
+        "en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
+        "nltk",
         "shortuuid",
         
         # Image processing
@@ -42,10 +45,14 @@ setup(
         "tqdm",
         "requests",
         "einops",
+        "mpi4py==4.1.1",
+        "openai==0.28.0",
         
         # Optional but commonly used
         "wandb",
         "openpyxl",
+        "huggingface_hub[hf_xet]",
+        "ipdb",
     ],
     extras_require={
         # Video-LLaVA specific dependencies
@@ -77,24 +84,3 @@ setup(
         ],
     },
 )
-
-# setup(
-#     name="visionzip",
-#     version="0.1.3",
-#     packages=find_packages(where='visionzip'),
-#     author="Senqiao Yang",
-#     author_email="yangsenqiao.ai@gmail.com",
-#     description="VisionZip: Longer is Better but Not Necessary in Vision Language Models",
-#     long_description=open('README.md').read(),
-#     long_description_content_type="text/markdown",
-#     url="https://github.com/dvlab-research/visionzip",
-#     classifiers=[
-#         "Programming Language :: Python :: 3",
-#         "License :: OSI Approved :: Apache Software License", 
-#         "Operating System :: OS Independent",
-#     ],
-#     python_requires='>=3.6',
-#     install_requires=[
-#         "peft==0.10.0",
-#     ],
-# )
