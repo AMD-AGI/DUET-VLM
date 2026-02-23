@@ -20,6 +20,7 @@ import random
 from dataclasses import dataclass, field
 import ast
 import json
+import time
 import logging
 import pathlib
 from typing import Dict, Optional, Sequence, List
@@ -145,6 +146,11 @@ class TrainingArguments(transformers.TrainingArguments):
 
     # Apex -------------------------------------------------------------------
     force_apex: bool = False
+
+    print_training_stats: bool = field(
+        default=False,
+        metadata={"help": "Print training throughput statistics after training completes."}
+    )
 
 def maybe_zero_3(param, ignore_status=False, name=None):
     from deepspeed import zero
@@ -704,6 +710,21 @@ def expand2square(pil_img, background_color):
         result.paste(pil_img, ((height - width) // 2, 0))
         return result
 
+def _check_file_exists_and_valid(folder, file_or_list):
+    """Check if file(s) exist and have size > 0. Handles both string and list."""
+    try:
+        if isinstance(file_or_list, list):
+            if len(file_or_list) == 0:
+                return False
+            first_file = file_or_list[0]
+        else:
+            first_file = file_or_list
+        path = os.path.join(folder, first_file)
+        return os.path.exists(path) and os.path.getsize(path) > 0
+    except (TypeError, OSError):
+        return False
+
+
 class LazySupervisedDataset(Dataset):
     """Dataset for supervised fine-tuning."""
 
@@ -753,7 +774,7 @@ class LazySupervisedDataset(Dataset):
                 sources = [sources]
             assert len(sources) == 1, "Don't know why it is wrapped to a list"  # FIXME
             # ======================================================================================================
-            if 'image' in sources[0] and 'video' not in sources[0]:
+            if 'image' in sources[0] and 'video' not in sources[0] and _check_file_exists_and_valid(self.data_args.image_folder, self.list_data_dict[i]['image']):
                 # rank0_print('image')
                 image_file = self.list_data_dict[i]['image']
                 image_folder = self.data_args.image_folder
@@ -770,7 +791,7 @@ class LazySupervisedDataset(Dataset):
                 sources = preprocess_multimodal(copy.deepcopy([e["conversations"] for e in sources]), self.data_args)
                 data_dict = preprocess(sources, self.tokenizer, has_image=True)
 
-            elif 'image' not in sources[0] and 'video' in sources[0]:
+            elif 'image' not in sources[0] and 'video' in sources[0] and _check_file_exists_and_valid(self.data_args.video_folder, self.list_data_dict[i]['video']):
                 # rank0_print('video')
                 video_file = self.list_data_dict[i]['video']
                 video_folder = self.data_args.video_folder
@@ -785,7 +806,7 @@ class LazySupervisedDataset(Dataset):
                 data_dict = preprocess(sources, self.tokenizer, has_image=True)
                 # print('after preprocess', data_dict['input_ids'])
 
-            elif 'image' in sources[0] and 'video' in sources[0]:
+            elif 'image' in sources[0] and 'video' in sources[0] and _check_file_exists_and_valid(self.data_args.image_folder, self.list_data_dict[i]['image']) and _check_file_exists_and_valid(self.data_args.video_folder, self.list_data_dict[i]['video']):
                 # rank0_print('image & video')
                 # video must before image
                 video_file = self.list_data_dict[i]['video']
@@ -817,6 +838,7 @@ class LazySupervisedDataset(Dataset):
             else:
                 sources = copy.deepcopy([e["conversations"] for e in sources])
                 data_dict = preprocess(sources, self.tokenizer, has_image=False)
+                image = []
 
             # ==========================================================================================================
 
@@ -824,7 +846,8 @@ class LazySupervisedDataset(Dataset):
                 data_dict = dict(input_ids=data_dict["input_ids"][0],
                                  labels=data_dict["labels"][0])
             # image exist in the data
-            if 'image' in self.list_data_dict[i] or 'video' in self.list_data_dict[i]:
+            if ('image' in self.list_data_dict[i] and _check_file_exists_and_valid(self.data_args.image_folder, self.list_data_dict[i]['image'])) \
+            or ('video' in self.list_data_dict[i] and _check_file_exists_and_valid(self.data_args.video_folder, self.list_data_dict[i]['video'])):
                 data_dict['image'] = image
             elif self.data_args.is_multimodal:
                 # image does not exist in the data, but the model is multimodal
@@ -1144,10 +1167,25 @@ def train(attn_implementation=None):
                     args=training_args,
                     **data_module)
 
+    start_time = time.time()
     if list(pathlib.Path(training_args.output_dir).glob("checkpoint-*")):
         trainer.train(resume_from_checkpoint=True)
     else:
         trainer.train()
+    end_time = time.time()
+
+    if getattr(training_args, 'print_training_stats', False) and (training_args.local_rank in (0, -1)):
+        elapsed = end_time - start_time
+        total_steps = trainer.state.global_step
+        batch_size = training_args.per_device_train_batch_size
+        max_len = training_args.model_max_length
+        print(f"Time taken to train: {elapsed:.2f} seconds")
+        print(f"Total samples per GPU: {total_steps * batch_size}")
+        print(f"Total tokens per GPU: {total_steps * batch_size * max_len}")
+        print(f"Total time per step: {elapsed / total_steps:.4f} seconds")
+        print(f"Total time per sample per GPU: {elapsed / (total_steps * batch_size):.4f} seconds")
+        print(f"Total time per token per GPU: {elapsed / (total_steps * batch_size * max_len):.6f} seconds")
+
     trainer.save_state()
 
     model.config.use_cache = True
