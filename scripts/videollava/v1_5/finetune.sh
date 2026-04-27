@@ -1,6 +1,6 @@
 #!/bin/bash
 export PYTHONPATH=/home/hkandala@amd.com/code/faster_VLM/Video-LLaVA
-export WANDB_API_KEY=REDACTED_WANDB_API_KEY
+# export WANDB_API_KEY=<insert wandb api key here and uncomment this line>
 
 JSON_FOLDER="/wekafs/hkandala/video_data/train_json"
 IMAGE_FOLDER="/wekafs/hkandala/LLaVA_video_data/llava_all_image_video"
