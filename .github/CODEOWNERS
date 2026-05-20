@@ -1,10 +1,10 @@
 # Default — every file requires project-team approval
-* @AMD-AGI/GenAI-India
+* @AMD-AGI/GenAI
 
 # Stricter paths — governance, security, and CI files
-/.github/CODEOWNERS     @AMD-AGI/GenAI-India
-/.github/workflows/     @AMD-AGI/GenAI-India
-/SECURITY.md            @AMD-AGI/GenAI-India
-/LICENSE                @AMD-AGI/GenAI-India
-/CONTRIBUTING.md        @AMD-AGI/GenAI-India
-/pyproject.toml         @AMD-AGI/GenAI-India
+/.github/CODEOWNERS     @AMD-AGI/GenAI
+/.github/workflows/     @AMD-AGI/GenAI
+/SECURITY.md            @AMD-AGI/GenAI
+/LICENSE                @AMD-AGI/GenAI
+/CONTRIBUTING.md        @AMD-AGI/GenAI
+/pyproject.toml         @AMD-AGI/GenAI
