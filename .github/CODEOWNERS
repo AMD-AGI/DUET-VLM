@@ -1,0 +1,12 @@
+# Code owners for this repository.
+# Lines later in the file take precedence; the last matching pattern wins.
+# See https://docs.github.com/articles/about-code-owners
+#
+# Per AMD-AGI Repository Standards § 2.1.4. Adjust team slugs for finer-grained
+# ownership (e.g. add a `*-leads` sub-team for CI/workflows and core paths).
+
+# Global catch-all — every file has at least one owner.
+* @AMD-AGI/brain-genai
+
+# Protect this CODEOWNERS file itself from unauthorized changes.
+/.github/CODEOWNERS @AMD-AGI/brain-genai
