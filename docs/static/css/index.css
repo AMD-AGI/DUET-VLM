@@ -1,0 +1,250 @@
+/* ============================================================
+   DUET-VLM project page — custom styles on top of Bulma
+   Palette mirrors the CVPR template theme used in the poster.
+   ============================================================ */
+
+:root {
+  --navy:  #16456C;
+  --blue:  #2C6187;
+  --slate: #355071;
+  --light: #C5D7ED;
+  --pale:  #AABED7;
+  --gold:  #D9AC42;
+  --olive: #878D43;
+  --ink:   #1A1A1A;
+}
+
+body, .title, .subtitle, .button, .tag {
+  font-family: 'Google Sans', 'Noto Sans', system-ui, -apple-system,
+               BlinkMacSystemFont, sans-serif;
+}
+
+/* ---------- top logo row (no background — logos sit on page) ---------- */
+.top-banner {
+  background: transparent;
+  padding: 1.2rem 1.5rem 0.4rem;
+}
+.banner-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.banner-logo {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+.banner-logo.cvpr { height: 68px; }
+
+@media screen and (max-width: 768px) {
+  .top-banner { padding: 0.7rem 1rem 0.2rem; }
+  .banner-logo { height: 34px; }
+  .banner-logo.cvpr { height: 44px; }
+}
+
+/* ---------- hero / title ---------- */
+.hero.is-light {
+  background: linear-gradient(180deg, #f7faff 0%, #eef3fb 100%);
+}
+
+.publication-title {
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 1.2rem !important;
+}
+
+.publication-authors {
+  margin-top: 0.4rem;
+  margin-bottom: 0.3rem;
+}
+
+.publication-authors a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.publication-authors a:hover { text-decoration: underline; }
+
+.eql-cntrb {
+  display: block;
+  font-size: 0.95rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+.publication-links {
+  margin-top: 1.4rem;
+}
+.publication-links .link-block { margin: 0.25rem; }
+.publication-links .button {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  transition: background 0.15s ease;
+}
+.publication-links .button:hover { background: var(--blue); }
+
+/* ---------- teaser ---------- */
+.teaser .hero-body { padding: 1.5rem 1.5rem 2.5rem; }
+.teaser img {
+  display: block; margin: 0 auto;
+  max-height: 420px; width: auto;
+}
+.teaser .subtitle {
+  margin-top: 1.5rem;
+  color: #333;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.teaser .subtitle strong { color: var(--navy); }
+.teaser .subtitle em { color: var(--blue); font-style: normal; font-weight: 600; }
+
+/* ---------- highlight stat cards ---------- */
+.stat-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.8rem 1.5rem;
+  text-align: center;
+  border-top: 6px solid var(--navy);
+  box-shadow: 0 2px 8px rgba(22, 69, 108, 0.10);
+  height: 100%;
+}
+.stat-gold { border-top-color: var(--gold); }
+.stat-blue { border-top-color: var(--blue); }
+.stat-navy { border-top-color: var(--navy); }
+.stat-big {
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+}
+.stat-gold .stat-big { color: var(--gold); }
+.stat-blue .stat-big { color: var(--blue); }
+.stat-mid {
+  margin-top: 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.stat-sub {
+  margin-top: 0.2rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* ---------- section captions ---------- */
+.caption {
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+  color: #555;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* ---------- method cards ---------- */
+.method-card {
+  background: #fff;
+  border: 1px solid #e5e9f2;
+  border-left: 6px solid var(--blue);
+  border-radius: 8px;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 1px 4px rgba(22, 69, 108, 0.06);
+  height: 100%;
+}
+.method-blue { border-left-color: var(--blue); }
+.method-gold { border-left-color: var(--gold); }
+.method-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.6rem;
+}
+.method-card ul {
+  margin-left: 1.2rem;
+  list-style: disc;
+}
+.method-card ul li {
+  margin-bottom: 0.45rem;
+  line-height: 1.45;
+  color: #222;
+}
+.method-card ul li strong { color: var(--navy); }
+
+/* ---------- results table ---------- */
+.results-table {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.results-table thead th {
+  background: var(--navy);
+  color: #fff;
+}
+.results-table tr.ours {
+  background: rgba(217, 172, 66, 0.18) !important;
+}
+.results-table tr.ours td { color: var(--navy); }
+
+/* ---------- video result cards ---------- */
+.video-card {
+  background: #fff;
+  border: 2px solid var(--navy);
+  border-radius: 10px;
+  padding: 1.4rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(22, 69, 108, 0.08);
+  height: 100%;
+}
+.video-card .vc-big {
+  font-size: 3.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.0;
+}
+.video-card.alt .vc-big { color: var(--blue); }
+.video-card .vc-mid {
+  margin-top: 0.4rem;
+  font-size: 1.15rem;
+  color: var(--navy);
+}
+.video-card .vc-sub {
+  margin-top: 0.2rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.video-card .vc-tag {
+  margin-top: 0.9rem;
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* ---------- BibTeX ---------- */
+#bibtex pre {
+  background: #f5f7fa;
+  border-left: 4px solid var(--navy);
+  border-radius: 4px;
+  padding: 1.2rem;
+  font-size: 0.92rem;
+  overflow-x: auto;
+}
+
+/* ---------- footer ---------- */
+.footer {
+  background: #fff;
+  border-top: 4px solid var(--navy);
+  padding: 2rem 1.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+.footer a { color: var(--blue); }
+
+/* ---------- responsive tweaks ---------- */
+@media screen and (max-width: 768px) {
+  .publication-title { font-size: 1.7rem !important; }
+  .stat-big { font-size: 2.4rem; }
+  .video-card .vc-big { font-size: 2.6rem; }
+}

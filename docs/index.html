@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="DUET-VLM: Dual-stage Unified Efficient Token reduction for VLM Training and Inference (CVPR 2026).">
+  <meta name="keywords" content="DUET-VLM, vision-language model, token reduction, LLaVA, CVPR 2026, AMD-AGI">
+  <meta property="og:title" content="DUET-VLM (CVPR 2026)">
+  <meta property="og:description"
+        content="Dual-stage Unified Efficient Token reduction for VLM training and inference.">
+  <title>DUET-VLM &middot; CVPR 2026</title>
+
+  <link rel="icon" type="image/png" href="static/images/amd_logo_trimmed.png">
+
+  <!-- Bulma + Font Awesome via CDN -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/index.css">
+</head>
+<body>
+
+<!-- ============================== TOP LOGO ROW ============================== -->
+<header class="top-banner">
+  <div class="container is-max-desktop">
+    <div class="banner-row">
+      <a href="https://www.amd.com" target="_blank" rel="noopener">
+        <img class="banner-logo amd"
+             src="static/images/amd_logo_dark.png"
+             alt="AMD">
+      </a>
+      <a href="https://cvpr.thecvf.com/Conferences/2026" target="_blank" rel="noopener">
+        <img class="banner-logo cvpr"
+             src="static/images/cvpr_logo_color.png"
+             alt="CVPR Denver 2026">
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<section class="hero is-light">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <h1 class="title is-1 publication-title">
+            DUET-VLM:&nbsp;Dual-stage&nbsp;Unified&nbsp;Efficient&nbsp;Token&nbsp;reduction
+            <br>
+            for&nbsp;VLM&nbsp;Training&nbsp;and&nbsp;Inference
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://rodosingh.github.io/" target="_blank" rel="noopener">Aditya Kumar Singh</a><sup>*</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://hiteshk03.github.io/" target="_blank" rel="noopener">Hitesh Kandala</a><sup>*</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/pratik-p-brahma/" target="_blank" rel="noopener">Pratik Prabhanjan Brahma</a>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/zicheng-liu/" target="_blank" rel="noopener">Zicheng Liu</a>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/ebarsoum/" target="_blank" rel="noopener">Emad Barsoum</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Advanced Micro Devices, Inc.&nbsp;(AMD-AGI)</span>
+            <span class="eql-cntrb"><sup>*</sup>Equal contribution</span>
+          </div>
+
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/2602.18846"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="static/pdfs/DUET_VLM.pdf"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://github.com/AMD-AGI/DUET-VLM"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="static/pdfs/DUET_VLM_poster.pdf"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-image"></i></span>
+                <span>Poster</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#bibtex"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-quote-right"></i></span>
+                <span>BibTeX</span>
+              </a>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TEASER ============================== -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/teaser.png" alt="DUET-VLM teaser: training-time accuracy on LLaVA">
+      <h2 class="subtitle has-text-centered">
+        <strong>DUET-VLM</strong> couples a redundancy-aware <em>vision-to-vision</em> merge
+        with a text-guided <em>text-to-vision</em> prune,
+        squeezing 576&nbsp;visual&nbsp;tokens down to 64
+        while retaining&nbsp;<strong>>&nbsp;99&nbsp;%</strong>&nbsp;of baseline accuracy
+        and cutting training time by&nbsp;<strong>~31&nbsp;%</strong>.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== HIGHLIGHTS ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-multiline is-centered">
+
+      <div class="column is-one-third">
+        <div class="stat-card stat-gold">
+          <div class="stat-big">&gt;&nbsp;99&nbsp;%</div>
+          <div class="stat-mid">accuracy retained</div>
+          <div class="stat-sub">@ 67&nbsp;% fewer visual tokens</div>
+        </div>
+      </div>
+
+      <div class="column is-one-third">
+        <div class="stat-card stat-blue">
+          <div class="stat-big">&gt;&nbsp;97&nbsp;%</div>
+          <div class="stat-mid">accuracy retained</div>
+          <div class="stat-sub">@ 89&nbsp;% fewer visual tokens</div>
+        </div>
+      </div>
+
+      <div class="column is-one-third">
+        <div class="stat-card stat-navy">
+          <div class="stat-big">&minus;&nbsp;31&nbsp;%</div>
+          <div class="stat-mid">training time</div>
+          <div class="stat-sub">vs LLaVA-1.5-7B baseline</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ABSTRACT ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Vision–language models (VLMs) waste compute on hundreds of redundant
+            visual tokens that contribute little to the answer.
+            <strong>DUET-VLM</strong> is a dual-stage token-reduction framework
+            that jointly optimises the visual and language pathways:
+            (i)&nbsp;a <em>V2V</em> stage merges semantically redundant patch tokens
+            inside the vision encoder using a redundancy-aware clustering of self-attention,
+            and (ii)&nbsp;a <em>T2V</em> stage prunes vision tokens inside the LLM
+            layer-by-layer, guided by attention from salient text tokens.
+          </p>
+          <p>
+            Across image and video benchmarks, DUET-VLM matches or beats prior
+            token-reduction methods (VisionZip, PyramidDrop, FastV, FitPrune,
+            HiRED) at every budget — retaining
+            <strong>&gt;&nbsp;99&nbsp;%</strong> of full-token accuracy with a
+            67&nbsp;% token cut and
+            <strong>&gt;&nbsp;97&nbsp;%</strong> at 89&nbsp;%. Crucially, the
+            same machinery also accelerates <em>training</em>, slashing
+            wall-clock training time by ~31&nbsp;% on LLaVA-1.5-7B with no
+            measurable accuracy loss.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== METHOD ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <h2 class="title is-3 has-text-centered">Method</h2>
+
+    <figure class="image">
+      <img src="static/images/pipeline.png" alt="DUET-VLM pipeline">
+    </figure>
+    <p class="caption has-text-centered">
+      <strong>Pipeline.</strong> (A) Redundancy-aware <em>V2V</em> merging inside
+      the vision encoder; (B) text-guided <em>T2V</em> pruning across LLM layers.
+    </p>
+
+    <div class="columns is-centered mt-5">
+
+      <div class="column is-half">
+        <div class="method-card method-blue">
+          <h3 class="method-title">Stage&nbsp;A &middot; V2V — Vision-to-Vision merging</h3>
+          <ul>
+            <li>Rank tokens by V2V self-attention &mdash; keep the
+                <strong>Top-k<sub>1</sub> dominant tokens</strong>.</li>
+            <li>Cluster the remaining residuals into k<sub>2</sub> groups
+                (centroids = high-score peripheral tokens) and merge each via
+                <strong>local neighbourhood averaging</strong>.</li>
+            <li>Applied <em>pre-LLM</em>, before any cross-modal fusion &mdash; preserves
+                structural diversity without diluting fine cues.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="column is-half">
+        <div class="method-card method-gold">
+          <h3 class="method-title">Stage&nbsp;B &middot; T2V — Text-guided pruning</h3>
+          <ul>
+            <li>Salient text tokens 𝒮 (including the last/sink token) attend to
+                vision tokens with score
+                <em>A<sub>t2v</sub><sup>(ℓ)</sup></em>.</li>
+            <li>At every stage layer&nbsp;ℓ,
+                <strong>retain&nbsp;⌊(1−λ)·N<sub>ℓ</sub>⌋ top-ranked visual tokens</strong>
+                — drop the rest; λ ramps up as reasoning deepens.</li>
+            <li>Adaptive, content-aware &mdash; keeps query-relevant patches,
+                sheds redundant background.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RESULTS ============================== -->
+<section class="section has-background-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results</h2>
+
+    <div class="columns is-centered is-vcentered">
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/radar.png"
+               alt="Radar plot comparing DUET-VLM, VisionZip, PyramidDrop">
+        </figure>
+        <p class="caption has-text-centered">
+          Accuracy retained vs. full-token baseline on TextVQA, GQA, MME and SQA
+          (LLaVA-1.5-7B, 192-token budget).
+        </p>
+      </div>
+
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/train_bars.png" alt="Training-time savings bars">
+        </figure>
+        <p class="caption has-text-centered">
+          Training-time savings at 192 / 128 / 64-token budgets — accuracy
+          almost untouched.
+        </p>
+      </div>
+    </div>
+
+    <!-- main results table -->
+    <h3 class="title is-5 has-text-centered mt-5">
+      Average accuracy retained (Tab&nbsp;1, condensed)
+    </h3>
+    <div class="table-container">
+      <table class="table is-striped is-hoverable is-fullwidth has-text-centered results-table">
+        <thead>
+          <tr>
+            <th class="has-text-left">Method</th>
+            <th>192&nbsp;tok</th>
+            <th>128&nbsp;tok</th>
+            <th>64&nbsp;tok</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="has-text-left">VisionZip</td>
+            <td>97.7&nbsp;%</td><td>96.3&nbsp;%</td><td>92.8&nbsp;%</td>
+          </tr>
+          <tr>
+            <td class="has-text-left">PyramidDrop</td>
+            <td>96.4&nbsp;%</td><td>95.6&nbsp;%</td><td>86.7&nbsp;%</td>
+          </tr>
+          <tr class="ours">
+            <td class="has-text-left"><strong>DUET-VLM&nbsp;(C)</strong></td>
+            <td><strong>99.0&nbsp;%</strong></td>
+            <td><strong>98.1&nbsp;%</strong></td>
+            <td><strong>95.4&nbsp;%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- video extension -->
+    <h3 class="title is-5 has-text-centered mt-6">Beyond images: video</h3>
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <div class="video-card">
+          <div class="vc-big">100.8&nbsp;%</div>
+          <div class="vc-mid">average accuracy</div>
+          <div class="vc-sub">@&nbsp;53.1&nbsp;% tokens dropped</div>
+          <div class="vc-tag">Video-LLaVA-7B &middot; TGIF · MSVD · MSRVTT</div>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card alt">
+          <div class="vc-big">97.6&nbsp;%</div>
+          <div class="vc-mid">average accuracy</div>
+          <div class="vc-sub">@&nbsp;93.4&nbsp;% tokens dropped</div>
+          <div class="vc-tag">Video-LLaVA-7B (aggressive budget)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================== QUALITATIVE ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Qualitative</h2>
+
+    <figure class="image mb-4">
+      <img src="static/images/qual1.png" alt="Qualitative example 1">
+    </figure>
+
+    <figure class="image">
+      <img src="static/images/qual2.png" alt="Qualitative example 2">
+    </figure>
+
+    <p class="caption has-text-centered">
+      Text-guided attention isolates query-relevant patches across LLM layers —
+      DUET-VLM preserves the regions the question actually depends on while
+      shedding background.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== BIBTEX ============================== -->
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code>@inproceedings{singh2026duetvlm,
+  title     = {DUET-VLM: Dual-stage Unified Efficient Token reduction
+               for VLM Training and Inference},
+  author    = {Singh, Aditya Kumar and Kandala, Hitesh and
+               Brahma, Pratik Prabhanjan and Liu, Zicheng and
+               Barsoum, Emad},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer
+               Vision and Pattern Recognition (CVPR)},
+  year      = {2026},
+}</code></pre>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8 has-text-centered content">
+        <p>
+          Template adapted from the
+          <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">
+            Academic Project Page Template</a> by Eliahu Horwitz, which itself
+          adapts <a href="https://nerfies.github.io">Nerfies</a>. Released under
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+        </p>
+        <p>
+          &copy; 2026 Advanced Micro Devices, Inc.&nbsp;(AMD-AGI).
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
